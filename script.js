@@ -53,3 +53,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+function renderSuggestions() {
+  const defaultData = JSON.parse(localStorage.getItem("defaultMedData")) || [];
+  const userData = JSON.parse(localStorage.getItem("medData")) || [];
+  const allData = [...defaultData, ...userData];
+
+  suggestionList.innerHTML = '';
+  allData.forEach((item, index) => {
+    const li = document.createElement('li');
+
+    const isDefault = index < defaultData.length;
+    li.innerHTML = `
+      <strong>${item.disease}</strong>: ${item.medicine} 
+      ${isDefault ? '<span class="standard-label">(Standard)</span>' : ''}
+      ${!isDefault ? `<button data-index="${index}" class="delete-btn">Delete</button>` : ''}
+    `;
+
+    suggestionList.appendChild(li);
+  });
+
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const indexToDelete = parseInt(this.getAttribute('data-index')) - defaultData.length;
+      userData.splice(indexToDelete, 1);
+      localStorage.setItem("medData", JSON.stringify(userData));
+      renderSuggestions();
+    });
+  });
+}
+
