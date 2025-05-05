@@ -78,5 +78,20 @@ body {
   color: #2980b9;
   text-decoration: underline;
 }
+      body {
+  background-image: url('https://images.unsplash.com/photo-1588776814546-ec0b9e2e1b1e?auto=format&fit=crop&w=1600&q=80');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: Arial, sans-serif;
+  color: #fff;
+}
+
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+}
+
 
   
