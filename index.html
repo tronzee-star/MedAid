@@ -2,43 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Medicine Suggestion App</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Disease Info Lookup</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <header>
-    <h1>Medicine Suggestion System</h1>
-    <h2 class="doctor-heading">(for docter's use)</h2>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="suggestions.html">Suggestions</a>
-      <a href="about.html">About</a>
-    </nav>
-  </header>
+  <div class="form-wrapper">
+    <h2>Disease Information – For Doctor's Use</h2>
+    <p class="patient-note">*Type a disease and press Enter to see its medical info</p>
 
-  <main>
-    <section>
-      <h2>Add Disease & Medicine</h2>
-      <form id="medicineForm">
-        <label for="disease">Disease:</label>
-        <input type="text" id="disease" required />
-        
-        <label for="medicine">Suggested Medicine:</label>
-        <input type="text" id="medicine" required />
-        
-        <button type="submit">Save</button>
-      </form>
-      <p id="message"></p>
-    </section>
-    <p class="patient-note">*If you're a patient, click <a href="suggestions.html">Suggestions</a> to access data.</p>
+    <input type="text" id="diseaseInput" placeholder="Enter disease name..." />
+    <div id="diseaseDetails" class="results"></div>
+  </div>
 
-  </main>
-
-  <footer>
-    <p>&copy; 2025 MedSuggest Inc.</p>
-  </footer>
-
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
