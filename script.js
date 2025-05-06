@@ -1,84 +1,58 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('medicineForm');
-  const message = document.getElementById('message');
-  const suggestionList = document.getElementById('suggestionList');
-
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const disease = document.getElementById('disease').value.trim();
-      const medicine = document.getElementById('medicine').value.trim();
-
-      if (!disease || !medicine) {
-        message.textContent = "Both fields are required.";
-        return;
-      }
-
-      let data = JSON.parse(localStorage.getItem('medData')) || [];
-      const id = Date.now(); // Unique ID
-      data.push({ id, disease, medicine });
-      localStorage.setItem('medData', JSON.stringify(data));
-
-      message.textContent = "Suggestion saved successfully!";
-      form.reset();
-    });
-  }
-
-  if (suggestionList) {
-    renderSuggestions();
-  }
-
-  function renderSuggestions() {
-    let data = JSON.parse(localStorage.getItem('medData')) || [];
-    if (data.length === 0) {
-      suggestionList.innerHTML = "<li>No data found.</li>";
-      return;
+const diseaseDatabase = {
+    malaria: {
+      description: "Malaria is a mosquito-borne infectious disease caused by Plasmodium parasites.",
+      symptoms: "Fever, chills, sweating, headache, vomiting.",
+      causes: "Bitten by infected Anopheles mosquitoes.",
+      prevention: "Use mosquito nets, repellents, and antimalarial medication.",
+      medication: "Artemether-Lumefantrine, Chloroquine."
+    },
+    typhoid: {
+      description: "Typhoid is a bacterial infection caused by Salmonella Typhi.",
+      symptoms: "High fever, weakness, stomach pain, rash.",
+      causes: "Contaminated food or water.",
+      prevention: "Good sanitation, vaccination.",
+      medication: "Ciprofloxacin, Azithromycin."
+    },
+    flu: {
+      description: "Influenza (flu) is a viral infection that attacks your respiratory system.",
+      symptoms: "Fever, cough, sore throat, muscle aches.",
+      causes: "Influenza viruses spread through droplets.",
+      prevention: "Vaccination, hygiene, avoiding contact with infected people.",
+      medication: "Oseltamivir, rest, fluids."
+    },
+    asthma: {
+      description: "Asthma is a condition in which your airways narrow and swell and produce extra mucus.",
+      symptoms: "Shortness of breath, chest tightness, wheezing.",
+      causes: "Allergens, exercise, cold air, smoke.",
+      prevention: "Avoid triggers, use inhalers.",
+      medication: "Salbutamol Inhaler, corticosteroids."
     }
-
-    suggestionList.innerHTML = '';
-    data.forEach((item) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${item.disease}</strong>: ${item.medicine} 
-        <button data-id="${item.id}" class="delete-btn">Delete</button>`;
-      suggestionList.appendChild(li);
-    });
-
-    document.querySelectorAll('.delete-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const idToDelete = parseInt(this.getAttribute('data-id'));
-        let newData = data.filter(item => item.id !== idToDelete);
-        localStorage.setItem('medData', JSON.stringify(newData));
-        renderSuggestions(); // Re-render list
-      });
-    });
+    // Add more diseases here as needed
+  };
+  
+  const diseaseInput = document.getElementById("diseaseInput");
+  const diseaseDetails = document.getElementById("diseaseDetails");
+  
+  diseaseInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const input = diseaseInput.value.trim().toLowerCase();
+      if (diseaseDatabase[input]) {
+        const info = diseaseDatabase[input];
+        diseaseDetails.innerHTML = `
+          <h3>${capitalize(input)}</h3>
+          <p><strong>Description:</strong> ${info.description}</p>
+          <p><strong>Symptoms:</strong> ${info.symptoms}</p>
+          <p><strong>Causes:</strong> ${info.causes}</p>
+          <p><strong>Prevention:</strong> ${info.prevention}</p>
+          <p><strong>Medication:</strong> ${info.medication}</p>
+        `;
+      } else {
+        diseaseDetails.innerHTML = `<p style="color:red;"><strong>No data found</strong> for "${input}". Try another disease.</p>`;
+      }
+    }
+  });
+  
+  function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
   }
-});
-function renderSuggestions() {
-  const defaultData = JSON.parse(localStorage.getItem("defaultMedData")) || [];
-  const userData = JSON.parse(localStorage.getItem("medData")) || [];
-  const allData = [...defaultData, ...userData];
-
-  suggestionList.innerHTML = '';
-  allData.forEach((item, index) => {
-    const li = document.createElement('li');
-
-    const isDefault = index < defaultData.length;
-    li.innerHTML = `
-      <strong>${item.disease}</strong>: ${item.medicine} 
-      ${isDefault ? '<span class="standard-label">(Standard)</span>' : ''}
-      ${!isDefault ? `<button data-index="${index}" class="delete-btn">Delete</button>` : ''}
-    `;
-
-    suggestionList.appendChild(li);
-  });
-
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const indexToDelete = parseInt(this.getAttribute('data-index')) - defaultData.length;
-      userData.splice(indexToDelete, 1);
-      localStorage.setItem("medData", JSON.stringify(userData));
-      renderSuggestions();
-    });
-  });
-}
-
+  
